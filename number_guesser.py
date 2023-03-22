@@ -43,32 +43,35 @@ while new_game == 'д':
     # Генерируем случайное число из указанного диапазона
     rand_num = randint(valid_left, valid_right)
 
-    # Проверка валидности указанного числа и попадание в указанный диапазон
+    # Проверка валидности указанного числа
     def guess_is_valid(q):
         global guess
         if not guess.isdigit():
             while not guess.isdigit():
                 guess = input('Нужно указать число (без пробелов, спец. символов и букв) - ')
-                if not valid_left <= int(guess) <= valid_right:
-                    while not valid_left <= int(guess) <= valid_right:
-                        guess = input(f'Число должно находится в указанном вами диапазоне от {valid_left} до {valid_right} - ')
-                    return int(guess)
+            return guess
         else:
-            return int(guess)
+            return guess
+
 
     # Узнаем у пользователя первое значение
     guess = input('Укажите число - ')
-    guess_is_valid(guess)
+
+    # Проверка попадания числа в указанный диапазон
+    if guess_is_valid(guess).isdigit():
+        while not valid_left <= int(guess_is_valid(guess)) <= valid_right:
+            guess = input(
+                f'Число должно находится в указанном вами диапазоне от {valid_left} до {valid_right} - ')
 
     # Добавляем счётчик попыток
     counter = 1
 
     # Запускаем цикл с подсказками для пользователя
-    while guess_is_valid(guess) != rand_num:
-        if guess_is_valid(guess) > rand_num:
+    while int(guess_is_valid(guess)) != rand_num:
+        if int(guess_is_valid(guess)) > rand_num:
             counter += 1
             guess = input('Загаданое число меньше, укажите новое - ')
-        elif guess_is_valid(guess) < rand_num:
+        elif int(guess_is_valid(guess)) < rand_num:
             counter += 1
             guess = input('Загаданое число больше, укажите новое - ')
 
@@ -82,8 +85,9 @@ while new_game == 'д':
     avg = sum_guesses / count_games
 
     # Хочет ли пользователь сыграть ещё
-    new_game = input('Хотите сыграть ещё? \n Напишие "д", если хотите сыграть ещё раз или "н", если не хотите: ').lower()
+    new_game = input('Хотите сыграть ещё? \nНапишие "д", если хотите сыграть ещё раз или "н", если не хотите: \n').lower()
 
+# Выводим общую статистику
 if count_games > 1:
     print(f'\nСтатистика вашей игры.\n'
           f'Кол-во игры: {count_games}\n'
