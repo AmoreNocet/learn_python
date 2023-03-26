@@ -18,6 +18,16 @@ def cast():
         n = choice(negative)
     return g, n
 
+def validate_yn():
+    while True:
+        text = input().lower().strip()
+        options_y = ('д', 'y', 'yes', 'да')
+        options_n = ('н','n', 'no', 'нет')
+        if text in options_y or text in options_n:
+            return text in options_y
+        else:
+            print('Неверный ввод. Повторите:')
+
 print('Привет Мир, я магический шар, и я знаю ответ на любой твой вопрос.\n')
 name = input('Как тебя зовут? ')
 
@@ -40,7 +50,7 @@ while new_q:
         list_q_n.append(question + ' : ' + n)
         #считаем инфу для статистики
         if g == 'Положительный':
-            counter_n += 1
+            counter_p += 1
         elif g == 'Нерешительно положительный':
             counter_i += 1
         elif g == 'Нейтральный':
@@ -48,7 +58,8 @@ while new_q:
         else:
             counter_neg += 1
         # узнаем у пользователья хоте ли он ещё что-то узнать
-        if input('Интересуте тебя что-то ещё? (Необходимо указать "Да/Нет") ').lower() == 'да':
+        print('Интересуте тебя что-то ещё? (Необходимо указать "Да/Нет")', end=' ')
+        if validate_yn():
             new_q = True
         else:
             new_q = False
@@ -62,9 +73,10 @@ while new_q:
           f'Кол-во негативных ответов на ваши вопросы {counter_neg}\n')
 
     # узнаем хочет ли пользователь увидеть вопросы и ответы к ним
-    if input('Хотите увидеть все заданные вопросы и ответы к ним? (Необходимо указать "Да/Нет") ').lower() == 'да':
+    print('Хотите увидеть все заданные вопросы и ответы к ним? (Необходимо указать "Да/Нет")')
+    if validate_yn():
         for i in range(len(list_q_n)):
             print(list_q_n[i])
-        print(f'\nУдачи, {name}')
+        print(f'\nУдачи, {name}!')
     else:
         print(f'\nУдачи, {name}!')
