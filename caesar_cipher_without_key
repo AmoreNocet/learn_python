@@ -1,0 +1,45 @@
+# валидность выбора языка
+def language():
+    while True:
+        lang = input().lower().strip()
+        options_ru = ('ru', 'russia', 'ру', 'рус', 'русский')
+        options_en = ('en', 'english', 'анг', 'английский')
+        if lang in options_ru:
+            return "абвгдеёжзийклмнопрстуфхцчшщъыьэюя", "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+        elif lang in options_en:
+            return "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        else:
+            print('Такой язык не поддерживается. Повторите: ', end='')
+
+def cipher(txt, alph_l, alph_u):
+    length = len(alph_l)  # cчитаем длину алфавит
+    for l in range(1, length):
+        result = []
+        for i in range(len(txt)):
+            # цикл для нижнего регистра
+            if txt[i].islower() and txt[i] in alph_l:
+                # проверяем каждый символ из введеного текста по алфавиту
+                for j in range(length):
+                    if 0 <= j - l <= length and txt[i] == alph_l[j]:
+                        result.append(alph_l[j - l])
+                    elif j - l < 0 and txt[i] == alph_l[j]:
+                        result.append(alph_l[length - abs(j - l)])
+            # цикл для верхнего регистра
+            elif txt[i].isupper() and txt[i] in alph_u:
+                # проверяем каждый символ из введеного текста по алфавиту
+                for j in range(length):
+                    if 0 <= j - l <= length and txt[i] == alph_u[j]:
+                        result.append(alph_u[j - l])
+                    elif j - l < 0 and txt[i] == alph_u[j]:
+                        result.append(alph_u[length - abs(j - l)])
+            # добавляем в список иные символы
+            else:
+                result.append(txt[i])
+        print(f'{l}. {"".join(result)}')
+
+print('Данная программа принимает зашифрованные текст и выводит все возможные вариации методом перебора, один из вариантов явлется рассшифрованным тексто.')
+print('На каком языке зашифрован текст? (рус/анг) Ввод: ', end='')
+dictionary, dictionary_upper = language()
+text = input('Введи текст, который необходимо расшифровать - ')
+print('Результат: ')
+cipher(text, dictionary, dictionary_upper)
