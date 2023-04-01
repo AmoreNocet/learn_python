@@ -1,0 +1,89 @@
+# проверка валидности действия с текстом
+def enc_or_dec():
+    while True:
+        encr_dec = input().lower().strip()
+        option_enc = ('зашифровать', 'encrypt', 'enc')
+        option_dec = ('расшифровать', 'decipher', 'dec')
+        if encr_dec in option_enc:
+            return 'enc'
+        elif encr_dec in option_dec:
+            return 'dec'
+        else:
+            print('Такой функции нет. Повторите: ', end='')
+# валидность выбора языка
+def language():
+    while True:
+        lang = input().lower().strip()
+        options_ru = ('ru', 'russia', 'ру', 'рус', 'русский')
+        options_en = ('en', 'english', 'анг', 'английский')
+        if lang in options_ru:
+            return "абвгдеёжзийклмнопрстуфхцчшщъыьэюя", "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+        elif lang in options_en:
+            return "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        else:
+            print('Такой язык не поддерживается. Повторите: ', end='')
+# валидность шага/ключа
+def key():
+    while True:
+        try:
+            k = int(input())
+            if k > 0:
+                return k
+                break
+            print('Значение должно быть больше 0. Повторите: ', end='')
+        except ValueError:
+            print('Необходимо указать целове число. Повторите: ', end='')
+# основной код функции
+def cipher(txt, act, key, alph_l, alph_u):
+    result = []
+    for i in range(len(txt)):
+        length = len(alph_l)  # cчитаем длину алфавита
+        # цикл для нижнего регистра
+        if txt[i].islower() and txt[i] in alph_l:
+            # проверяем каждый символ из введеного текста по алфавиту
+            for j in range(length):
+                # шифрование текста
+                if act == 'enc':
+                    if 0 <= j + key < length and txt[i] == alph_l[j]:
+                        result.append(alph_l[j + key])
+                    elif j + key >= length and txt[i] == alph_l[j]:
+                        result.append(alph_l[(j + key) - length])
+                # расшифрование текста
+                elif act == 'dec':
+                    if 0 <= j - key <= length and txt[i] == alph_l[j]:
+                        result.append(alph_l[j - key])
+                    elif j - key < 0 and txt[i] == alph_l[j]:
+                        result.append(alph_l[length - abs(j - key)])
+        # цикл для верхнего регистра
+        elif txt[i].isupper() and txt[i] in alph_u:
+            # проверяем каждый символ из введеного текста по алфавиту
+            for j in range(length):
+                # шифрование текста
+                if act == 'enc':
+                    if 0 <= j + key < length and txt[i] == alph_u[j]:
+                        result.append(alph_u[j + key])
+
+                    elif j + key >= length and txt[i] == alph_u[j]:
+                        result.append(alph_u[j + key - length])
+                # расшифрование текста
+                elif act == 'dec':
+                    if 0 <= j - key <= length and txt[i] == alph_u[j]:
+                        result.append(alph_u[j - key])
+
+                    elif j - key < 0 and txt[i] == alph_u[j]:
+                        result.append(alph_u[length - abs(j - key)])
+        # добавляем в список иные символы
+        else:
+            result.append(txt[i])
+    return ''.join(result)
+
+print('Здравствуйте! Данная программа способна шифровать и расшифровывать текста используя шифр "Цезаря" на русском и английском языке.')
+print('\nКакой язык вас интересует? (рус\анг)\nПоле для ввода:', end=' ')
+dictionary, dictionary_upper = language()
+text = input('\nВведите текс: ')
+print('\nЧто необходмсо сделать с этим текстом? (Зашифровать(enc)\Расшифровать(dec))\nПоле для ввода:', end=' ')
+a = enc_or_dec()
+print('\nУкажите ключ.\nПоле для ввода: ', end='')
+k = key()
+
+print(f'Результат: {cipher(text, a, k, dictionary, dictionary_upper)}')
